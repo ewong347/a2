@@ -1,0 +1,26 @@
+SHOW databases;
+DROP DATABASE IF EXISTS ewong347assign2db;
+CREATE DATABASE ewong347assign2db;
+USE ewong347assign2db;
+
+GRANT USAGE ON *.* TO 'ta'@'localhost';
+DROP USER 'ta'@'localhost';
+CREATE USER 'ta'@'localhost' IDENTIFIED BY 'cs3319';
+GRANT ALL PRIVILEGES ON yourwesternuseridassign2db.* TO 'ta'@'localhost';
+FLUSH PRIVILEGES;
+
+
+
+SHOW tables;
+CREATE TABLE product (ProductID VARCHAR(2) not NULL, Description VARCHAR(20) not NULL, ItemCost FLOAT not NULL,  ItemsOnHand INT NOT NULL, PRIMARY KEY (ProductID));
+
+CREATE TABLE agent (AgentID VARCHAR(2) NOT NULL, FirstName VARCHAR(30),  LastName VARCHAR(30) NOT NULL, City VARCHAR(15) NOT NULL, CommissionPercentage FLOAT NOT NULL, PRIMARY KEY (AgentID));
+
+CREATE TABLE customer (CustomerID VARCHAR(2) NOT NULL, FirstName VARCHAR(30) NOT NULL, LastName VARCHAR(30) NOT NULL, City VARCHAR(15) NOT NULL, PhoneNumber VARCHAR(8)  NOT NULL, AgentID VARCHAR(2) NOT NULL, FOREIGN KEY (AgentID) REFERENCES agent (AgentID), PRIMARY KEY (CustomerID));
+
+CREATE TABLE Boughtby (Quantity INT NOT NULL, CustomerID VARCHAR(2) NOT NULL, ProductID VARCHAR(2) NOT NULL, FOREIGN KEY (CustomerID) REFERENCES customer (CustomerID), FOREIGN KEY (ProductID) REFERENCES product (ProductID));
+
+
+SHOW tables;
+
+

@@ -1,0 +1,31 @@
+use ewong347assign2db;
+-- Query 1 Show the description of all the products
+SELECT Description FROM product;
+-- Query 2 Show the city of all customers with no repeats
+SELECT DISTINCT city FROM customer;
+-- Query 3 Show all the data in the agent table, but show them in order of their cities
+SELECT * FROM agent ORDER BY city;
+-- Querry 4 Show the first and last name of all customers from Springfield
+SELECT Firstname, Lastname FROM customer WHERE city = "Springfield";
+-- Querry 5 List the last name of all customers who deal with Regis
+SELECT customer.LastName FROM agent, customer WHERE agent.agentid = customer.agentID AND agent.FirstName = "Regis";
+-- Querry 6 List the description of any product with the letters "pad" or "Pad" in the description name
+SELECT Description FROM product where Description LIKE "%pad%" or "%Pad%";
+-- Querry 7 For any customer who has actually purchased products, list the last name of each customer, the description of each product they have purchase and the quantity they have purchased of that product
+SELECT LastName, Description, Quantity FROM customer,Boughtby, product WHERE Boughtby.customerID= customer.customerID and product.productID= Boughtby.productID;
+-- Querry 8 Find the total number of products purchased by Homer. Search using his first name, not his customer id.  Just display the amount but give it a title of "Homer's Total Purchases" when the query is run. 
+Select SUM(Quantity) AS "Homer's Total Purchases" FROM product, Boughtby, customer where product.productID=Boughtby.productID AND customer.customerID= Boughtby.customerID and FirstName = "Homer";
+-- Querry 9 For any customer who has actually purchased products, find the total number of products purchased by each customer, print out the first and last name of the customer and their total number of  purchases.
+Select SUM(Quantity) AS "Total Purchases", FirstName, LastName FROM product, Boughtby, customer WHERE product.productID=Boughtby.productID AND customer.customerID= Boughtby.customerID GROUP BY FirstName;
+-- Querry 10 List the descriptions and quantity on hand of any products that have not been purchased by anyone
+SELECT Description, ItemsOnHand FROM product LEFT JOIN Boughtby ON Boughtby.productid = product.productid WHERE Quantity IS NULL;
+-- Querry 11 List the description and quantity of any product that has not been purchase by Fred Flintstone (referencing his name in the query, both first and last)
+SELECT Description, ItemsOnHand FROM product WHERE Description NOT IN (SELECT Description FROM product LEFT JOIN  Boughtby ON Boughtby.productid = product.productid WHERE customerid= (SELECT customerid FROM customer WHERE Firstname = "Fred" and Lastname = "Flinstone"));
+-- Querry 12 List the first and last name of any agent and customer where the agent deals with a customer from the same city as the agent.
+SELECT agent.FirstName AS "Agent First Name", agent.LastName AS "Agent Last Name", customer.FirstName AS "Customer First Name", customer.LastName AS "Customer Last Name"  FROM agent, customer where agent.agentid = customer.agentID AND agent.city=customer.city;
+-- Querry 13 List the total number of knee pads that have been purchase. Give the result a nice title. 
+select SUM(Quantity) AS "Total Knee Pads Purchased" from product, Boughtby WHERE product.productID = Boughtby.productID AND Description = "Knee Pads";
+-- Querry 14 Find all products  (description) which have been purchased by more than 3 customers 
+SELECT Description FROM Boughtby, product WHERE Boughtby.productid= product.productID GROUP BY product.ProductID HAVING COUNT(product.ProductID)>3;
+-- Querry 15 Find the first name and last name of all agents who deal with customers that have purchased knee pads.
+SELECT agent.Firstname, agent.Lastname FROM agent, product, customer, Boughtby WHERE product.productid = Boughtby.productid AND customer.customerid = Boughtby.customerid AND customer.agentid = agent.agentid AND Description = "Knee Pads";

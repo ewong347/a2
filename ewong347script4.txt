@@ -1,0 +1,20 @@
+use ewong347assign2db;
+
+SELECT * FROM agent;
+SELECT * FROM product;
+SELECT * FROM customer;
+SELECT * FROM Boughtby;
+
+CREATE VIEW TotalCost AS SELECT Firstname as "First Name", Lastname as "Last Name", Description, Quantity, Quantity*ItemCost as "Total_Cost" FROM product, customer, Boughtby WHERE product.productid=Boughtby.productid AND customer.customerid = Boughtby.customerid ORDER BY LastName ;
+
+SELECT * FROM TotalCost;
+
+SELECT * FROM TotalCost WHERE "Total_Cost" > 100;
+
+DELETE FROM product WHERE Description = "Shin Guard";
+
+SELECT * FROM product;
+
+DELETE FROM agent WHERE city = "Springfield";
+
+-- Delete did not work because agentID is a foreign key in customer table. Cascading deletes are turned off, and foreign keys cannot be NULL. Deleting a record which is referenced in another table results in a NULL key, therefore deleting the record will not be allowed 
